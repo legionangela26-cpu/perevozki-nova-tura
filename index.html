@@ -1,53 +1,44 @@
 <!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Перевозки на склад Новая Тура — Было / Стало</title>
+<title>Расписание перевозок — склад Новая Тура (факт)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
  *{box-sizing:border-box}
  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1a2b22;background:#f4f7f5}
  .wrap{max-width:1080px;margin:0 auto;padding:24px 18px 60px}
- h1{font-size:30px;margin:0 0 4px;color:#0B6E4F}
+ h1{font-size:29px;margin:0 0 4px;color:#0B6E4F}
  .sub{color:#5a6b62;margin:0 0 22px;font-size:15px}
  .kpis{display:flex;flex-wrap:wrap;gap:14px;margin:18px 0 26px}
  .kpi{flex:1;min-width:150px;background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
  .kpi .big{font-size:26px;font-weight:800;color:#0B6E4F}
  .kpi .lbl{font-size:12px;color:#6b7c73;margin-top:3px;text-transform:uppercase;letter-spacing:.4px}
- .kpi.save{background:#0B6E4F;color:#fff} .kpi.save .big,.kpi.save .lbl{color:#fff}
  #map{height:440px;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.1);margin:10px 0 6px}
  .maphint{font-size:12px;color:#7a8b82;margin:0 0 30px}
- .secttl{font-size:22px;font-weight:800;margin:34px 0 6px;padding:10px 16px;border-radius:12px}
- .secttl.was{background:#fdecec;color:#b3261e} .secttl.now{background:#e3f3ec;color:#0B6E4F}
- .secdesc{color:#5a6b62;font-size:14px;margin:0 0 14px}
+ .legend{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 0;font-size:13px}
+ .legend span{display:flex;align-items:center;gap:6px} .dot{width:12px;height:12px;border-radius:50%}
  .dir{background:#fff;border-radius:14px;padding:16px 18px;margin:14px 0;box-shadow:0 3px 14px rgba(0,0,0,.05)}
  .dtitle{font-size:16px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
- .dbus{font-size:13px;font-weight:700;padding:4px 12px;border-radius:20px}
- .dbad{background:#fdecec;color:#b3261e} .dgood{background:#e3f3ec;color:#0B6E4F}
- .merge{font-size:13.5px;background:#f0f7f3;border-radius:10px;padding:10px 13px;margin:10px 0 6px;line-height:1.5}
+ .dcnt{font-size:12.5px;font-weight:700;color:#48584f;background:#eef2f0;padding:4px 12px;border-radius:20px}
  .route{border-top:1px solid #eef1ef;padding:11px 0 9px}
  .rhead{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
  .badge{color:#fff;font-weight:700;font-size:12px;padding:3px 9px;border-radius:7px;min-width:42px;text-align:center}
  .rname{font-weight:700;font-size:15px}
- .seat{font-size:12.5px;color:#48584f;background:#eef2f0;padding:2px 9px;border-radius:20px}
- .cnt{font-size:12.5px;color:#48584f;background:#eef2f0;padding:2px 9px;border-radius:20px}
+ .seat,.cnt{font-size:12.5px;color:#48584f;background:#eef2f0;padding:2px 9px;border-radius:20px}
  .chain{font-size:13px;color:#33433b;margin:6px 0 3px}
  .times{font-size:12px;color:#7a8b82;font-variant-numeric:tabular-nums;line-height:1.6}
  .load{font-size:12px;color:#9aa8a0;margin-top:5px} .load .fill{color:#b3261e;font-weight:600}
- .foot{margin-top:40px;background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 3px 14px rgba(0,0,0,.05);font-size:13.5px;line-height:1.6;color:#43534a}
+ .foot{margin-top:36px;background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 3px 14px rgba(0,0,0,.05);font-size:13.5px;line-height:1.6;color:#43534a}
  .foot b{color:#0B6E4F}
- .legend{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 0;font-size:13px}
- .legend span{display:flex;align-items:center;gap:6px} .dot{width:12px;height:12px;border-radius:50%}
 </style></head><body><div class="wrap">
 
-<h1>Перевозки рабочих на склад «Новая Тура»</h1>
-<p class="sub">Казань + Зеленодольск · сравнение «Было / Стало» по оптимизации · подготовлено для Риваля</p>
+<h1>Расписание перевозок рабочих на склад «Новая Тура»</h1>
+<p class="sub">Текущее состояние сети — факт по рабочим таблицам (Казань + Зеленодольск, версия 01.01.26)</p>
 
 <div class="kpis">
-  <div class="kpi"><div class="big">23</div><div class="lbl">маршрутов сейчас</div></div>
-  <div class="kpi"><div class="big">146</div><div class="lbl">рейсов в сутки</div></div>
-  <div class="kpi"><div class="big">~35</div><div class="lbl">машин сейчас</div></div>
-  <div class="kpi"><div class="big">~26</div><div class="lbl">машин после</div></div>
-  <div class="kpi save"><div class="big">−9</div><div class="lbl">машин экономия</div></div>
+  <div class="kpi"><div class="big">24</div><div class="lbl">маршрутов</div></div>
+  <div class="kpi"><div class="big">156</div><div class="lbl">рейсов в сутки</div></div>
+  <div class="kpi"><div class="big">5</div><div class="lbl">направления</div></div>
 </div>
 
 <div id="map"></div>
@@ -57,24 +48,22 @@
   <span><span class="dot" style="background:#7C3AED"></span>Северо-восток</span>
   <span><span class="dot" style="background:#DC2626"></span>Север</span>
   <span><span class="dot" style="background:#EA580C"></span>Юг/Центр</span>
-  <span><span class="dot" style="background:#0891B2"></span>Зеленодольск/дальние</span>
+  <span><span class="dot" style="background:#0891B2"></span>Зеленодольск/пригород</span>
 </div>
-<p class="maphint">Опорные точки направлений. Точные координаты по складу, Зеленодольску, Васильево и Осиново — выверены по карте; остальные показаны ориентировочно (точный геокодинг всех остановок — на этапе пилота).</p>
+<p class="maphint">Опорные точки направлений. Точные координаты по складу, Зеленодольску, Васильево и Осиново выверены по карте; остальные ориентировочны.</p>
 
-<div class="secttl was">БЫЛО — как возим сейчас</div>
-<p class="secdesc">Каждый маршрут — отдельный автобус. 11 пригородных маршрутов делают всего по 2 ходки в день и простаивают днём. Это самый дорогой сегмент.</p>
 
         <div class="dir" style="border-left:6px solid #2563EB">
-          <div class="dtitle" style="color:#2563EB">ЗАПАД — трасса М7 <div class="dbus dbad">Машин сейчас: ~6</div></div>
-          
+          <div class="dtitle" style="color:#2563EB">ЗАПАД — трасса М7 (Казань)
+            <span class="dcnt">4 маршр. · 31 рейс./сут</span></div>
           
     <div class="route">
       <div class="rhead"><span class="badge" style="background:#2563EB">№12</span>
         <span class="rname">Осиново</span>
         <span class="seat">🚌 18 мест</span>
-        <span class="cnt">11 рейс./сут</span></div>
+        <span class="cnt">13 рейс./сут</span></div>
       <div class="chain">Юбилейная 20 › Садовая › Тансык › <b>СКЛАД</b></div>
-      <div class="times">06:20 · 07:10 · 08:20 · 09:45 · 11:00 · 13:00 · 18:35 · 19:05 · 19:55 · 20:50 · 21:45</div>
+      <div class="times">06:20 · 07:10 · 08:20 · 08:50 · 09:45 · 11:00 · 13:00 · 18:35 · 19:05 · 19:55 · 20:20 · 20:50 · 21:20</div>
       <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
     </div>
     <div class="route">
@@ -96,15 +85,6 @@
       <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
     </div>
     <div class="route">
-      <div class="rhead"><span class="badge" style="background:#2563EB">№3</span>
-        <span class="rname">Васильево</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">6 рейс./сут</span></div>
-      <div class="chain">Стомат.поликлиника › Магазин (Мехколонна) › Сосновый Бор › <b>СКЛАД</b></div>
-      <div class="times">05:50 · 07:15 · 08:50 · 17:50 · 19:15 · 20:50</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
       <div class="rhead"><span class="badge" style="background:#2563EB">№525</span>
         <span class="rname">Салават Купере</span>
         <span class="seat">🚌 18 мест</span>
@@ -115,8 +95,8 @@
     </div>
         </div>
         <div class="dir" style="border-left:6px solid #7C3AED">
-          <div class="dtitle" style="color:#7C3AED">СЕВЕРО-ВОСТОК <div class="dbus dbad">Машин сейчас: ~8</div></div>
-          
+          <div class="dtitle" style="color:#7C3AED">СЕВЕРО-ВОСТОК (Казань)
+            <span class="dcnt">5 маршр. · 28 рейс./сут</span></div>
           
     <div class="route">
       <div class="rhead"><span class="badge" style="background:#7C3AED">№9</span>
@@ -165,8 +145,8 @@
     </div>
         </div>
         <div class="dir" style="border-left:6px solid #DC2626">
-          <div class="dtitle" style="color:#DC2626">СЕВЕР <div class="dbus dbad">Машин сейчас: ~4</div></div>
-          
+          <div class="dtitle" style="color:#DC2626">СЕВЕР (Казань)
+            <span class="dcnt">4 маршр. · 10 рейс./сут</span></div>
           
     <div class="route">
       <div class="rhead"><span class="badge" style="background:#DC2626">№15</span>
@@ -206,8 +186,8 @@
     </div>
         </div>
         <div class="dir" style="border-left:6px solid #EA580C">
-          <div class="dtitle" style="color:#EA580C">ЮГ / ЦЕНТР <div class="dbus dbad">Машин сейчас: ~3</div></div>
-          
+          <div class="dtitle" style="color:#EA580C">ЮГ / ЦЕНТР (Казань)
+            <span class="dcnt">3 маршр. · 6 рейс./сут</span></div>
           
     <div class="route">
       <div class="rhead"><span class="badge" style="background:#EA580C">№464</span>
@@ -238,8 +218,8 @@
     </div>
         </div>
         <div class="dir" style="border-left:6px solid #0891B2">
-          <div class="dtitle" style="color:#0891B2">ЗЕЛЕНОДОЛЬСК И ДАЛЬНИЕ <div class="dbus dbad">Машин сейчас: ~14</div></div>
-          
+          <div class="dtitle" style="color:#0891B2">ЗЕЛЕНОДОЛЬСК И ПРИГОРОД
+            <span class="dcnt">8 маршр. · 81 рейс./сут</span></div>
           
     <div class="route">
       <div class="rhead"><span class="badge" style="background:#0891B2">№6</span>
@@ -260,12 +240,21 @@
       <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
     </div>
     <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">Позис*</span>
-        <span class="rname">Позис + Союзная (объединён)</span>
+      <div class="rhead"><span class="badge" style="background:#0891B2">№19</span>
+        <span class="rname">Позис</span>
         <span class="seat">🚌 18 мест</span>
         <span class="cnt">4 рейс./сут</span></div>
-      <div class="chain">Союзная › Паратская › Парк Победы › Торговый дом › Мираж › Строителей › Позис › <b>СКЛАД</b></div>
-      <div class="times">06:30 · 08:30 · 18:30 · 20:30</div>
+      <div class="chain">Магазин Позис › Мираж › Строителей 39А › <b>СКЛАД</b></div>
+      <div class="times">06:55 · 08:00 · 18:55 · 20:00</div>
+      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
+    </div>
+    <div class="route">
+      <div class="rhead"><span class="badge" style="background:#0891B2">№20</span>
+        <span class="rname">Союзная</span>
+        <span class="seat">🚌 18 мест</span>
+        <span class="cnt">4 рейс./сут</span></div>
+      <div class="chain">Союзная 6 › Паратская 10 › Парк Победы › Торговый дом › <b>СКЛАД</b></div>
+      <div class="times">06:50 · 08:10 · 18:50 · 20:10</div>
       <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
     </div>
     <div class="route">
@@ -287,239 +276,12 @@
       <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
     </div>
     <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">№563</span>
-        <span class="rname">Помары</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">4 рейс./сут</span></div>
-      <div class="chain">Помары › Мамасево › <b>СКЛАД</b></div>
-      <div class="times">05:30 · 07:20 · 16:00 · 18:00</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-        </div>
-
-<div class="secttl now">СТАЛО — после оптимизации</div>
-<p class="secdesc">Близкие маршруты собираются в одно направление: одна машина по пути подбирает поток нескольких соседних маршрутов. Тот же поток людей — меньшим парком.</p>
-
-        <div class="dir" style="border-left:6px solid #2563EB">
-          <div class="dtitle" style="color:#2563EB">ЗАПАД — трасса М7 <div class="dbus dgood">Машин после: ~4 &nbsp;<b>(−2)</b></div></div>
-          <div class="merge"><b>Что объединяем:</b> Юдино подсаживается на нитку Залесного (одна машина по М7). Васильево уходит в коридор Зеленодольска (см. ниже). Осиново — частый короткий шаттл рядом со складом, синхронизируем тайминг.</div>
-          
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#2563EB">№12</span>
-        <span class="rname">Осиново</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">11 рейс./сут</span></div>
-      <div class="chain">Юбилейная 20 › Садовая › Тансык › <b>СКЛАД</b></div>
-      <div class="times">06:20 · 07:10 · 08:20 · 09:45 · 11:00 · 13:00 · 18:35 · 19:05 · 19:55 · 20:50 · 21:45</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#2563EB">№16</span>
-        <span class="rname">Юдино</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">НГЧ-8 › Бирюзовая › Красикова › ДК Железнодорожников › <b>СКЛАД</b></div>
-      <div class="times">07:15 · 19:15</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#2563EB">№18</span>
-        <span class="rname">Залесный</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">8 рейс./сут</span></div>
-      <div class="chain">Жилмассив Залесный › <b>СКЛАД</b></div>
-      <div class="times">07:30 · 08:30 · 09:30 · 10:30 · 17:30 · 18:30 · 19:30 · 20:30</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#2563EB">№3</span>
+      <div class="rhead"><span class="badge" style="background:#0891B2">№3</span>
         <span class="rname">Васильево</span>
         <span class="seat">🚌 18 мест</span>
-        <span class="cnt">6 рейс./сут</span></div>
+        <span class="cnt">10 рейс./сут</span></div>
       <div class="chain">Стомат.поликлиника › Магазин (Мехколонна) › Сосновый Бор › <b>СКЛАД</b></div>
-      <div class="times">05:50 · 07:15 · 08:50 · 17:50 · 19:15 · 20:50</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#2563EB">№525</span>
-        <span class="rname">Салават Купере</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">8 рейс./сут</span></div>
-      <div class="chain">Шакирова › Юсупова › <b>СКЛАД</b></div>
-      <div class="times">07:00 · 07:45 · 08:30 · 17:00 · 17:30 · 18:00 · 18:45 · 19:30</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-        </div>
-        <div class="dir" style="border-left:6px solid #7C3AED">
-          <div class="dtitle" style="color:#7C3AED">СЕВЕРО-ВОСТОК <div class="dbus dgood">Машин после: ~6 &nbsp;<b>(−2)</b></div></div>
-          <div class="merge"><b>Что объединяем:</b> Тасма, Адоратского, Жилплощадка (по 2 рейса) подсаживаются заездами на магистральную нитку Козьей слободы. 3 отдельные машины уходят.</div>
-          
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#7C3AED">№9</span>
-        <span class="rname">Козья слобода</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">20 рейс./сут</span></div>
-      <div class="chain">м.Козья Слобода › Краснококшайская › Фрунзе › Горьковское ш. › Факел › <b>СКЛАД</b></div>
-      <div class="times">04:50 · 06:10 · 06:50 · 07:50 · 08:30 · 10:30 · 12:40 · 14:30 · 15:00 · 17:00 · 18:20 · 19:00 · 19:50 · 20:40 · 21:00 · 22:00 · 22:30 · 23:20 · 00:45 · 02:45</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#7C3AED">№22</span>
-        <span class="rname">Тасма</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Соц-юрид. институт › ПО Тасма › <b>СКЛАД</b></div>
-      <div class="times">07:10 · 19:10</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#7C3AED">№26</span>
-        <span class="rname">Адоратского</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Адоратского › Татнефть-Арена › Абсалямова › <b>СКЛАД</b></div>
-      <div class="times">07:25 · 19:25</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#7C3AED">№21</span>
-        <span class="rname">Жилплощадка</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Химиков 19 › Химиков 45 › Новониколаевский › <b>СКЛАД</b></div>
-      <div class="times">07:10 · 19:10</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#7C3AED">№11</span>
-        <span class="rname">Дербышки</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Мира 37 › <b>СКЛАД</b></div>
-      <div class="times">07:10 · 19:10</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-        </div>
-        <div class="dir" style="border-left:6px solid #DC2626">
-          <div class="dtitle" style="color:#DC2626">СЕВЕР <div class="dbus dgood">Машин после: ~2 &nbsp;<b>(−2)</b></div></div>
-          <div class="merge"><b>Что объединяем:</b> Эдельвейс (50 мест, ходит полупустым) становится сборным автобусом для Амирхана / Калинина / Волгоградской — собирает их поток по пути.</div>
-          
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#DC2626">№15</span>
-        <span class="rname">Эдельвейс / Авиастрой</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Короленко 83 › Ибрагимова › Побежимова › Ленинградская › Пржевальского › <b>СКЛАД</b></div>
-      <div class="times">06:00 · 20:00</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#DC2626">№23</span>
-        <span class="rname">Амирхана</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">4 рейс./сут</span></div>
-      <div class="chain">Спорттовары › Амирхана › Парк Хаус › Океан › <b>СКЛАД</b></div>
-      <div class="times">06:15 · 08:05 · 19:05 · 20:50</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#DC2626">№14</span>
-        <span class="rname">Калинина</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Калинина › Батурина › <b>СКЛАД</b></div>
-      <div class="times">06:20 · 18:20</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#DC2626">№24</span>
-        <span class="rname">Волгоградская–Серова</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Волгоградская › Декабристов › Серова › Школа 70 › <b>СКЛАД</b></div>
-      <div class="times">07:00 · 18:55</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-        </div>
-        <div class="dir" style="border-left:6px solid #EA580C">
-          <div class="dtitle" style="color:#EA580C">ЮГ / ЦЕНТР <div class="dbus dgood">Машин после: ~2 &nbsp;<b>(−1)</b></div></div>
-          <div class="merge"><b>Что объединяем:</b> Пр. Победы (50 мест, полупустой) подбирает поток Тукая и Урманче по южной дуге.</div>
-          
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#EA580C">№464</span>
-        <span class="rname">Пр. Победы</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">м.Пр.Победы › Агропарк › Тектоник › Арбузова › <b>СКЛАД</b></div>
-      <div class="times">07:00 · 19:00</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#EA580C">№8</span>
-        <span class="rname">Тукая</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Татарстан 40 › <b>СКЛАД</b></div>
-      <div class="times">06:30 · 18:30</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#EA580C">№441</span>
-        <span class="rname">Урманче 8</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">2 рейс./сут</span></div>
-      <div class="chain">Урманче › Ср.Кабан › Первомайский › Чернышевского › <b>СКЛАД</b></div>
-      <div class="times">07:00 · 19:00</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-        </div>
-        <div class="dir" style="border-left:6px solid #0891B2">
-          <div class="dtitle" style="color:#0891B2">ЗЕЛЕНОДОЛЬСК И ДАЛЬНИЕ <div class="dbus dgood">Машин после: ~12 &nbsp;<b>(−2)</b></div></div>
-          <div class="merge"><b>Что объединяем:</b> Позис уже объединён с Союзной (−1 машина). Два маршрута Волжска (Горгаз + Перекрёсток) совмещаются по таймингу (−1). Васильево вливается в коридор Зеленодольск→склад: автобус из Зеленодольска физически проезжает мимо Васильево (подтверждено картой).</div>
-          
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">№6</span>
-        <span class="rname">Колхозный рынок</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">19 рейс./сут</span></div>
-      <div class="chain">Колхозный рынок › Кинотеатр Россия › Заикина › Октябрьская › <b>СКЛАД</b></div>
-      <div class="times">04:00 · 04:25 · 05:50 · 06:05 · 07:10 · 07:45 · 09:10 · 10:30 · 12:10 · 13:45 · 15:45 · 17:20 · 19:20 · 19:50 · 20:50 · 21:20 · 22:10 · 23:00 · 00:40</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">№27</span>
-        <span class="rname">Мирный</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">20 рейс./сут</span></div>
-      <div class="chain">Автовокзал Мирный › Айша › Ильинское › Поворот на Раифу › <b>СКЛАД</b></div>
-      <div class="times">05:00 · 05:20 · 06:15 · 06:55 · 07:35 · 08:20 · 09:00 · 09:45 · 11:40 · 13:00 · 14:20 · 16:30 · 17:00 · 18:00 · 18:30 · 19:33 · 20:53 · 22:13 · 23:13 · 00:53</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">Позис*</span>
-        <span class="rname">Позис + Союзная (объединён)</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">4 рейс./сут</span></div>
-      <div class="chain">Союзная › Паратская › Парк Победы › Торговый дом › Мираж › Строителей › Позис › <b>СКЛАД</b></div>
-      <div class="times">06:30 · 08:30 · 18:30 · 20:30</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">№5</span>
-        <span class="rname">Волжск Горгаз</span>
-        <span class="seat">🚌 50 мест</span>
-        <span class="cnt">10 рейс./сут</span></div>
-      <div class="chain">Горгаз › Орлова › Русич › <b>СКЛАД</b></div>
-      <div class="times">05:00 · 06:20 · 07:00 · 08:10 · 11:00 · 13:00 · 17:00 · 18:20 · 19:00 · 20:10</div>
-      <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
-    </div>
-    <div class="route">
-      <div class="rhead"><span class="badge" style="background:#0891B2">№4</span>
-        <span class="rname">Волжск Перекрёсток</span>
-        <span class="seat">🚌 18 мест</span>
-        <span class="cnt">10 рейс./сут</span></div>
-      <div class="chain">Перекрёсток › Матюшенко › Детский Мир › Заря › <b>СКЛАД</b></div>
-      <div class="times">06:00 · 06:30 · 08:00 · 08:30 · 11:30 · 13:30 · 18:00 · 18:30 · 20:00 · 20:30</div>
+      <div class="times">06:00 · 06:45 · 07:10 · 07:40 · 08:05 · 18:00 · 18:45 · 19:10 · 20:05 · 21:05</div>
       <div class="load">Факт пассажиров (заполняет диспетчер): <span class="fill">утро ____ / вечер ____ чел.</span></div>
     </div>
     <div class="route">
@@ -534,14 +296,14 @@
         </div>
 
 <div class="foot">
-  <b>Как читать загрузку.</b> В расписаниях есть вместимость автобуса (18 / 45 / 55 мест), но фактическое число людей по рейсам ведётся вручную у диспетчеров. Поля «факт пассажиров» оставлены под заполнение — как только цифры внесём, экономия пересчитается в людях и рублях, и подтвердим, что объединённый поток помещается в один автобус.<br><br>
-  <b>Что точное, а что оценка.</b> Маршруты, остановки, времена рейсов и вместимость — из рабочих расписаний (факт). Число машин по направлениям — расчётная оценка по оборотам; точные цифры даст пилот по данным ГЛОНАСС и ручного подсчёта.<br><br>
-  <b>Резерв сверх этого.</b> На магистралях ночью (00:00–03:00) идут 50-местные автобусы почти пустыми — отдельная экономия топлива через подбор вместимости по времени суток. Связку Салават Купере / Радужный под один напольный автобус досчитаем, когда получим недостающие маршруты Радужного.
+  <b>Что в документе.</b> Все маршруты, остановки, времена рейсов и вместимость взяты напрямую из рабочих расписаний (Казань — лист «01.01.26», Зеленодольск — лист «01.01.26»). Маршруты сгруппированы по направлениям только для удобства чтения.<br><br>
+  <b>Загрузка пассажиров.</b> В таблицах есть вместимость автобуса (18 / 50 мест), но фактическое число людей по рейсам ведётся вручную у диспетчеров. Поля «факт пассажиров» оставлены под заполнение — после внесения цифр будет видно, где автобусы идут полупустыми.<br><br>
+  <b>Следующий шаг.</b> На этой фактической базе считаем оптимизацию (объединение близких маршрутов, подбор вместимости) и экономию — отдельным документом, когда появятся цифры загрузки.
 </div>
 
 </div>
 <script>
- var pts=[{"name": "СКЛАД Новая Тура", "lat": 55.8684547, "lon": 48.8412279, "color": "#0B6E4F", "sklad": true}, {"name": "№12 Осиново", "lat": 55.8769131, "lon": 48.8855372, "color": "#2563EB", "sklad": false}, {"name": "№16 Юдино", "lat": 55.8056, "lon": 48.9636, "color": "#2563EB", "sklad": false}, {"name": "№18 Залесный", "lat": 55.847, "lon": 48.954, "color": "#2563EB", "sklad": false}, {"name": "№3 Васильево", "lat": 55.8372875, "lon": 48.6792331, "color": "#2563EB", "sklad": false}, {"name": "№525 Салават Купере", "lat": 55.8654, "lon": 48.993, "color": "#2563EB", "sklad": false}, {"name": "№9 Козья слобода", "lat": 55.8217, "lon": 49.0893, "color": "#7C3AED", "sklad": false}, {"name": "№22 Тасма", "lat": 55.827, "lon": 49.082, "color": "#7C3AED", "sklad": false}, {"name": "№26 Адоратского", "lat": 55.8345, "lon": 49.109, "color": "#7C3AED", "sklad": false}, {"name": "№21 Жилплощадка", "lat": 55.849, "lon": 49.164, "color": "#7C3AED", "sklad": false}, {"name": "№11 Дербышки", "lat": 55.833, "lon": 49.268, "color": "#7C3AED", "sklad": false}, {"name": "№15 Эдельвейс / Авиастрой", "lat": 55.829, "lon": 49.134, "color": "#DC2626", "sklad": false}, {"name": "№23 Амирхана", "lat": 55.829, "lon": 49.095, "color": "#DC2626", "sklad": false}, {"name": "№14 Калинина", "lat": 55.807, "lon": 49.076, "color": "#DC2626", "sklad": false}, {"name": "№24 Волгоградская–Серова", "lat": 55.821, "lon": 49.123, "color": "#DC2626", "sklad": false}, {"name": "№464 Пр. Победы", "lat": 55.7666, "lon": 49.2206, "color": "#EA580C", "sklad": false}, {"name": "№8 Тукая", "lat": 55.7838, "lon": 49.111, "color": "#EA580C", "sklad": false}, {"name": "№441 Урманче 8", "lat": 55.756, "lon": 49.185, "color": "#EA580C", "sklad": false}, {"name": "№6 Колхозный рынок", "lat": 55.8547, "lon": 48.4887, "color": "#0891B2", "sklad": false}, {"name": "№27 Мирный", "lat": 55.829, "lon": 48.55, "color": "#0891B2", "sklad": false}, {"name": "Позис* Позис + Союзная (объединён)", "lat": 55.8568831, "lon": 48.5610517, "color": "#0891B2", "sklad": false}, {"name": "№5 Волжск Горгаз", "lat": 55.8636, "lon": 48.3596, "color": "#0891B2", "sklad": false}, {"name": "№4 Волжск Перекрёсток", "lat": 55.87, "lon": 48.37, "color": "#0891B2", "sklad": false}, {"name": "№563 Помары", "lat": 56.0986, "lon": 48.0247, "color": "#0891B2", "sklad": false}];
+ var pts=[{"name": "СКЛАД Новая Тура", "lat": 55.8684547, "lon": 48.8412279, "color": "#0B6E4F", "sklad": true}, {"name": "№12 Осиново", "lat": 55.8769131, "lon": 48.8855372, "color": "#2563EB", "sklad": false}, {"name": "№16 Юдино", "lat": 55.8056, "lon": 48.9636, "color": "#2563EB", "sklad": false}, {"name": "№18 Залесный", "lat": 55.847, "lon": 48.954, "color": "#2563EB", "sklad": false}, {"name": "№525 Салават Купере", "lat": 55.8654, "lon": 48.993, "color": "#2563EB", "sklad": false}, {"name": "№9 Козья слобода", "lat": 55.8217, "lon": 49.0893, "color": "#7C3AED", "sklad": false}, {"name": "№22 Тасма", "lat": 55.827, "lon": 49.082, "color": "#7C3AED", "sklad": false}, {"name": "№26 Адоратского", "lat": 55.8345, "lon": 49.109, "color": "#7C3AED", "sklad": false}, {"name": "№21 Жилплощадка", "lat": 55.849, "lon": 49.164, "color": "#7C3AED", "sklad": false}, {"name": "№11 Дербышки", "lat": 55.833, "lon": 49.268, "color": "#7C3AED", "sklad": false}, {"name": "№15 Эдельвейс / Авиастрой", "lat": 55.829, "lon": 49.134, "color": "#DC2626", "sklad": false}, {"name": "№23 Амирхана", "lat": 55.829, "lon": 49.095, "color": "#DC2626", "sklad": false}, {"name": "№14 Калинина", "lat": 55.807, "lon": 49.076, "color": "#DC2626", "sklad": false}, {"name": "№24 Волгоградская–Серова", "lat": 55.821, "lon": 49.123, "color": "#DC2626", "sklad": false}, {"name": "№464 Пр. Победы", "lat": 55.7666, "lon": 49.2206, "color": "#EA580C", "sklad": false}, {"name": "№8 Тукая", "lat": 55.7838, "lon": 49.111, "color": "#EA580C", "sklad": false}, {"name": "№441 Урманче 8", "lat": 55.756, "lon": 49.185, "color": "#EA580C", "sklad": false}, {"name": "№6 Колхозный рынок", "lat": 55.8547, "lon": 48.4887, "color": "#0891B2", "sklad": false}, {"name": "№27 Мирный", "lat": 55.829, "lon": 48.55, "color": "#0891B2", "sklad": false}, {"name": "№19 Позис", "lat": 55.8568831, "lon": 48.5610517, "color": "#0891B2", "sklad": false}, {"name": "№20 Союзная", "lat": 55.8546854, "lon": 48.4886841, "color": "#0891B2", "sklad": false}, {"name": "№5 Волжск Горгаз", "lat": 55.8636, "lon": 48.3596, "color": "#0891B2", "sklad": false}, {"name": "№4 Волжск Перекрёсток", "lat": 55.87, "lon": 48.37, "color": "#0891B2", "sklad": false}, {"name": "№563 Помары", "lat": 56.0986, "lon": 48.0247, "color": "#0891B2", "sklad": false}, {"name": "№3 Васильево", "lat": 55.8372875, "lon": 48.6792331, "color": "#0891B2", "sklad": false}];
  var map=L.map('map');
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'OSM'}).addTo(map);
  var grp=[];
