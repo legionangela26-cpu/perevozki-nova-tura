@@ -27,6 +27,17 @@
  .dbus{font-size:12.5px;font-weight:700;padding:4px 12px;border-radius:20px;margin-left:6px}
  .dbad{background:#fdecec;color:#b3261e} .dgood{background:#e3f3ec;color:#0B6E4F}
  .merge{font-size:13.5px;background:#f0f7f3;border-radius:10px;padding:10px 13px;margin:10px 0 6px;line-height:1.5}
+ .secttl.money{background:#ece7fb;color:#5b21b6}
+ .calc{background:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 3px 14px rgba(0,0,0,.05);margin:14px 0}
+ .calc .row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:10px 0;border-bottom:1px solid #f0f1f0}
+ .calc .row:last-child{border-bottom:none}
+ .calc label{font-size:14px;color:#33433b}
+ .calc input{font-size:18px;font-weight:700;width:170px;padding:8px 12px;border:2px solid #c7b8f0;border-radius:10px;text-align:right;color:#5b21b6}
+ .calc .res{font-size:15px;color:#43534a} .calc .res b{font-size:22px;color:#0B6E4F}
+ .calc .big{font-size:30px;font-weight:800;color:#0B6E4F}
+ .cap{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0}
+ .cap .c{flex:1;min-width:200px;background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 3px 14px rgba(0,0,0,.05)}
+ .cap .c .v{font-size:22px;font-weight:800;color:#5b21b6} .cap .c .l{font-size:13px;color:#5a6b62;margin-top:4px}
  .route{border-top:1px solid #eef1ef;padding:11px 0 9px}
  .rhead{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
  .badge{color:#fff;font-weight:700;font-size:12px;padding:3px 9px;border-radius:7px;min-width:42px;text-align:center}
@@ -561,6 +572,22 @@
     </div>
         </div>
 
+<div class="secttl money">ЭКОНОМИЯ В РУБЛЯХ</div>
+<p class="secdesc">Снимаем с линии <b>9 машин</b> при том же потоке людей. Впишите свою стоимость содержания одной машины в месяц (топливо + зарплата водителя + аренда/содержание) — расчёт пересчитается сразу. Цифра-пример внизу — ориентир, замените на свою.</p>
+
+<div class="calc">
+  <div class="row"><label>Снято машин с линии</label><div class="big">9</div></div>
+  <div class="row"><label>Стоимость 1 машины на линии в месяц, ₽<br><span style="font-size:12px;color:#9aa8a0">топливо + ЗП водителя + аренда/содержание</span></label>
+    <input id="rate" type="number" value="400000" step="10000"></div>
+  <div class="row"><label>Экономия в месяц</label><div class="res"><b id="perMonth"></b> ₽</div></div>
+  <div class="row"><label>Экономия в год</label><div class="res"><b id="perYear"></b> ₽</div></div>
+</div>
+
+<div class="cap">
+  <div class="c"><div class="v">6–15 млн ₽</div><div class="l">капитал за 1 автобус (ПАЗ ~6 млн, напольный 14–15 млн) — каждая снятая машина высвобождает эти деньги</div></div>
+  <div class="c"><div class="v">каждый новый город</div><div class="l">та же оптимизация экономит парк в Рязани, Воронеже, Саратове — окупает себя на каждом запуске</div></div>
+</div>
+
 <div class="foot">
   <b>Что факт, а что расчёт.</b> Маршруты, остановки, времена рейсов и вместимость — напрямую из рабочих расписаний (Казань + Зеленодольск, лист «01.01.26»), это факт. Число машин и экономия — расчётная оценка по числу рейсов; точные цифры даст пилот по данным ГЛОНАСС и ручного подсчёта.<br><br>
   <b>Загрузка пассажиров.</b> Фактическое число людей по рейсам ведётся вручную у диспетчеров — поля «факт пассажиров» под заполнение. После внесения цифр подтвердим, что объединённый поток помещается в один автобус, и пересчитаем экономию в людях и рублях.<br><br>
@@ -579,5 +606,15 @@
    grp.push([p.lat,p.lon]);
  });
  map.fitBounds(grp,{padding:[40,40]});
+
+ var SAVED=9;
+ function recalc(){
+   var rate=parseFloat(document.getElementById('rate').value)||0;
+   var m=SAVED*rate, y=m*12;
+   document.getElementById('perMonth').textContent=m.toLocaleString('ru-RU');
+   document.getElementById('perYear').textContent=y.toLocaleString('ru-RU');
+ }
+ document.getElementById('rate').addEventListener('input',recalc);
+ recalc();
 </script>
 </body></html>
